@@ -1,0 +1,113 @@
+body {
+    margin: 0;
+    height: 100vh;
+}
+
+
+chess-board {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    width: 100%;
+    height: 100%;
+}
+
+.square {
+    min-width: 32px;
+    min-height: 32px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: stretch;
+    align-content: stretch;
+}
+
+.square:hover {
+    filter: brightness(1.1);
+}
+
+.square:active {
+    filter: brightness(0.9);
+}
+
+.square.dropover {
+    filter: brightness(0.8);
+}
+
+
+.square.light {
+    background-color: aliceblue;
+}
+
+.square.dark {
+    background-color: cornflowerblue;
+}
+
+.square.light.highlighted {
+    background-color: #fff855;
+}
+
+.square.dark.highlighted {
+    background-color: gold;
+}
+
+.piece {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    flex: 1;
+    font-size: 1em;
+    display: flex;
+    min-width: 50%;
+    justify-content: stretch;
+    align-content: stretch;
+    position: relative;
+}
+
+.piece.pawn.white {
+    background-image: url('./pieces/pawn.white.svg');
+}
+
+.piece.knight.white {
+    background-image: url('./pieces/knight.white.svg');
+}
+
+.piece.bishop.white {
+    background-image: url('./pieces/bishop.white.svg');
+}
+
+.piece.rook.white {
+    background-image: url('./pieces/rook.white.svg');
+}
+
+.piece.queen.white {
+    background-image: url('./pieces/queen.white.svg');
+}
+
+.piece.king.white {
+    background-image: url('./pieces/king.white.svg');
+}
+
+
+.piece.pawn.black {
+    background-image: url('./pieces/pawn.black.svg');
+}
+
+.piece.knight.black {
+    background-image: url('./pieces/knight.black.svg');
+}
+
+.piece.bishop.black {
+    background-image: url('./pieces/bishop.black.svg');
+}
+
+.piece.rook.black {
+    background-image: url('./pieces/rook.black.svg');
+}
+
+.piece.queen.black {
+    background-image: url('./pieces/queen.black.svg');
+}
+
+.piece.king.black {
+    background-image: url('./pieces/king.black.svg');
+}
