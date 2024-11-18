@@ -13,14 +13,14 @@
     <chess-board id="chessboard"></chess-board>
 
     <script type="module">
-        import init, {get_available_moves, get_board} from "../pkg/chess.js";
+        import init, {get_available_moves, get_board, new_game} from "../pkg/chess.js";
 
         init().then(() => {
             let chessboard = document.getElementById("chessboard");
             chessboard.getAvailableMoves = (pos) => {
                 return get_available_moves(pos);
             };
-
+            new_game();
 
             chessboard.setChessboard(get_board())
         });

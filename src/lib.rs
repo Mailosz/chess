@@ -1,37 +1,111 @@
 
 
-use game::Game;
+use std::{borrow::Borrow, cell::RefCell};
+
+use game::{Chessboard, Game, Piece};
 use wasm_bindgen::{convert::{IntoWasmAbi, OptionIntoWasmAbi, ReturnWasmAbi, WasmAbi}, prelude::*};
+use once_cell::sync::Lazy;
 
 mod game;
+
+
+static mut CURRENT_GAME : Option<Game> = Option::None;
 
 #[wasm_bindgen]
 extern {
     pub fn alert(s: &str);
 }
 
+fn no_moves() -> Vec<u32> {
+    return Vec::new();
+}
+
+fn white_pawn_moves(board: Chessboard, position: u32) -> Vec<u32> {
+
+    let mut vec = Vec::new();
+
+    if (position < 56) {
+        
+        if board.squares[(position + 8) as usize] == Piece::Empty {
+            vec.push(position + 8);
+
+            if (position < 16 && position >= 8 && board.squares[(position + 16) as usize] == Piece::Empty) {
+                vec.push(position + 16);
+            }
+        }
+    }
+
+    return vec;
+}
+
+fn black_pawn_moves(board: Chessboard, position: u32) -> Vec<u32> {
+
+    let mut vec = Vec::new();
+
+    if (position >= 8) {
+        
+        if board.squares[(position - 8) as usize] == Piece::Empty {
+            vec.push(position - 8);
+
+            if (position >= 48 && position < 56 && board.squares[(position - 16) as usize] == Piece::Empty) {
+                vec.push(position - 16);
+            }
+        }
+    }
+
+    return vec;
+}
+
 #[wasm_bindgen]
 pub fn get_available_moves(position: u32) -> Vec<u32> {
 
-    let mut moves = Vec::new();
+    let game = get_current_game();
 
-    moves.push(1);
-    moves.push(3);
-    moves.push(5);
-    moves.push(7);
-    moves.push(9);
-    moves.push(11);
-    moves.push(13);
+    let piece = game.board.squares[position as usize];
+
+    let moves = match piece {
+        game::Piece::Empty => no_moves(),
+        game::Piece::SpecialX => no_moves(),
+        game::Piece::PawnW => white_pawn_moves(game.board, position),
+        game::Piece::QueenW => no_moves(),
+        game::Piece::RookW => no_moves(),
+        game::Piece::BishopW => no_moves(),
+        game::Piece::KnightW => no_moves(),
+        game::Piece::SpecialW => no_moves(),
+        game::Piece::KingW => no_moves(),
+        game::Piece::PawnB => black_pawn_moves(game.board, position),
+        game::Piece::KingB => no_moves(),
+        game::Piece::QueenB => no_moves(),
+        game::Piece::RookB => no_moves(),
+        game::Piece::BishopB => no_moves(),
+        game::Piece::KnightB => no_moves(),
+        game::Piece::SpecialB => no_moves(),
+    };
 
     return moves;
 
+}
+
+#[wasm_bindgen]
+pub fn new_game() -> () {
+    unsafe{
+        CURRENT_GAME.replace(Game::new());
+    }
+}
+
+fn get_current_game() -> Game {
+    let game;
+    unsafe {
+        game = CURRENT_GAME.unwrap();
+    }
+    return game;
 }
 
 
 #[wasm_bindgen]
 pub fn get_board() -> JsValue {
 
-    let game = Game::new();
+    let game = get_current_game();
 
     let mut squares: Vec<&str> = Vec::with_capacity(64);
 
